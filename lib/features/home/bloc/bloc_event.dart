@@ -7,10 +7,20 @@ abstract class HomeEvent {}
 class HomeInitialEvent extends HomeEvent {
   
 }
+//Button Clicked Event
+class HomeWislishtButtonEvent extends HomeEvent {
+  final ProductDataModel wishlistClicked;
 
-class HomeWislishtButtonEvent extends HomeEvent {}
+  HomeWislishtButtonEvent({required this.wishlistClicked});
+}
 
-class HomeCartButtonEvent extends HomeEvent {}
+class HomeCartButtonEvent extends HomeEvent {
+  final ProductDataModel cartListClicked;
+
+  HomeCartButtonEvent({required this.cartListClicked});
+}
+
+// Navigate State
 
 class HomeWishlistNavigateButtonEvent extends HomeEvent {}
 

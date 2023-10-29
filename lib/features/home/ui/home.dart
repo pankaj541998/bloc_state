@@ -4,6 +4,8 @@ import 'package:bloc_statemenagement/features/wishlist/ui/wishlist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../data/cart_list.dart';
+import '../../../data/wishlist_list.dart';
 import '../../cart/ui/cart.dart';
 
 class Home extends StatefulWidget {
@@ -23,6 +25,8 @@ class _HomeState extends State<Home> {
   final HomeBloc homeBloc = HomeBloc();
   @override
   Widget build(BuildContext context) {
+    print('cart list $cartList');
+    print('wishlist  list $wishlistList');
     return BlocConsumer<HomeBloc, HomeState>(
       bloc: homeBloc,
       listenWhen: (previous, current) => current is HomeActionState,
@@ -43,54 +47,87 @@ class _HomeState extends State<Home> {
               builder: (context) => const Wishlistcreen(),
             ),
           );
+        } else if (state is HomeSnackBarCartState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Added to Cart'),
+            ),
+          );
+        } else if (state is HomeSnackBarWishlistState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Added to Wishlist'),
+            ),
+          );
         }
       },
       builder: (context, state) {
         switch (state.runtimeType) {
           case HomeLoadingState:
-            return Scaffold(
+            return const Scaffold(
               body: Center(
                 child: CircularProgressIndicator(),
               ),
             );
           case HomeLoddedSuccessState:
             final succesState = state as HomeLoddedSuccessState;
-
             return Scaffold(
               appBar: AppBar(
                 title: const Text('Home'),
                 actions: [
-                  IconButton(
-                      onPressed: () {
-                        homeBloc.add(HomeWishlistNavigateButtonEvent());
-                      },
-                      icon: const Icon(Icons.favorite_border)),
-                  IconButton(
-                      onPressed: () {
-                        homeBloc.add(HomeCartNavigateButtonEvent());
-                      },
-                      icon: const Icon(Icons.shopping_bag_outlined)),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Badge.count(
+                      count: wishlistList.length,
+                      child: GestureDetector(
+                        onTap: () {
+                          homeBloc.add(HomeWishlistNavigateButtonEvent());
+                        },
+                        child: const Icon(Icons.favorite_border),
+                      ),
+                    ),
+                  ),
+                   SizedBox(width: 20),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Badge.count(
+                      count: cartList.length,
+                      child: GestureDetector(
+                        onTap: () {
+                          homeBloc.add(HomeCartNavigateButtonEvent());
+                        },
+                        child: const Icon(Icons.shopping_bag_outlined),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 20),
                 ],
               ),
-              body: ListView.builder(
-                itemCount: succesState.products.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return ProductListWidget(
-                    productDataModel: succesState.products[index],
-                    homeBloc: homeBloc,
-                  );
-                },
+              body: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: succesState.products.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return ProductListWidget(
+                          productDataModel: succesState.products[index],
+                          homeBloc: homeBloc,
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             );
           case HomeErrorState:
-            return Scaffold(
+            return const Scaffold(
               body: Center(
                 child: Text('Error'),
               ),
             );
           default:
-            return SizedBox();
+            return const SizedBox();
         }
       },
     );

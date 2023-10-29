@@ -1,6 +1,13 @@
 part of 'bloc_bloc.dart';
 
 @immutable
-sealed class BlocState {}
+abstract class WishlistState {}
 
-final class BlocInitial extends BlocState {}
+abstract class WishlistActionState extends WishlistState {}
+
+class WishlistInitial extends WishlistState {}
+
+class WishlistSuccessState extends WishlistState {
+  final List<ProductDataModel> wishlistList;
+  WishlistSuccessState({required this.wishlistList});
+}

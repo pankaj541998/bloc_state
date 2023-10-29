@@ -1,12 +1,14 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:bloc_statemenagement/features/cart/bloc/bloc_bloc.dart';
 import 'package:bloc_statemenagement/features/home/bloc/bloc_bloc.dart';
 import 'package:bloc_statemenagement/features/home/model/home_product_model.dart';
 import 'package:flutter/material.dart';
 
-class ProductListWidget extends StatelessWidget {
+class CartTileWidget extends StatelessWidget {
   final ProductDataModel productDataModel;
-  HomeBloc homeBloc = HomeBloc();
-  ProductListWidget(
-      {super.key, required this.productDataModel, required this.homeBloc});
+  CartBloc cartBloc= CartBloc();
+  CartTileWidget({super.key, required this.productDataModel, required this.cartBloc});
 
   @override
   Widget build(BuildContext context) {
@@ -60,11 +62,7 @@ class ProductListWidget extends StatelessWidget {
                       children: [
                         IconButton(
                           onPressed: () {
-                            homeBloc.add(
-                              HomeWislishtButtonEvent(
-                                wishlistClicked: productDataModel,
-                              ),
-                            );
+                            
                           },
                           icon: const Icon(
                             Icons.favorite_border,
@@ -72,12 +70,10 @@ class ProductListWidget extends StatelessWidget {
                         ),
                         IconButton(
                           onPressed: () {
-                            homeBloc.add(HomeCartButtonEvent(
-                              cartListClicked: productDataModel,
-                            ));
+                            cartBloc.add(CartRemovesSuccessEvent(cartList: productDataModel));
                           },
                           icon: const Icon(
-                            Icons.shopping_bag_outlined,
+                            Icons.shopping_bag,
                           ),
                         ),
                       ],
