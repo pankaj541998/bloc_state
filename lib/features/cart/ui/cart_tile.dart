@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:bloc_statemenagement/features/cart/bloc/bloc_bloc.dart';
-import 'package:bloc_statemenagement/features/home/bloc/bloc_bloc.dart';
 import 'package:bloc_statemenagement/features/home/model/home_product_model.dart';
 import 'package:flutter/material.dart';
 
